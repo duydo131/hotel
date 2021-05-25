@@ -16,6 +16,6 @@ class RentDetailReadOnlySerializer(serializers.Serializer):
     room = serializers.PrimaryKeyRelatedField(read_only=True)
     price = serializers.IntegerField(read_only=True)
     voucher = serializers.FloatField(read_only=True)
-    feedback = serializers.PrimaryKeyRelatedField(read_only=True)
     created_at = serializers.DateTimeField(read_only=True)
     updated_at = serializers.DateTimeField(read_only=True)
+    services = serializers.PrimaryKeyRelatedField(read_only=True)

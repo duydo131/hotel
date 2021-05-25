@@ -3,6 +3,7 @@ import uuid
 from django.db import models
 from safedelete import SOFT_DELETE_CASCADE
 from safedelete.models import SafeDeleteMixin
+from apps.rents.models.feedback import Feedback
 
 
 class Rent(SafeDeleteMixin):
@@ -20,6 +21,14 @@ class Rent(SafeDeleteMixin):
         blank=True,
         null=True,
     )
+    feedback = models.OneToOneField(
+        Feedback,
+        on_delete=models.DO_NOTHING,
+        related_name="rent",
+        blank=True,
+        null=True,
+    )
+
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

@@ -14,9 +14,5 @@ class RoomCategoryReadOnlySerializer(serializers.Serializer):
     fid = serializers.CharField(read_only=True)
     name = serializers.CharField(read_only=True)
     description = serializers.CharField(read_only=True)
-    # services = serializers.ManyToManyField(
-    #     Service,
-    #     related_name="room_categorys",
-    #     null=True,
-    #     blank=True,
-    # )
+    services = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    rooms = serializers.PrimaryKeyRelatedField(many=True, read_only=True)

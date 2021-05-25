@@ -16,3 +16,4 @@ class ServiceReadOnlySerializer(serializers.Serializer):
     voucher = serializers.FloatField(read_only=True)
     description = serializers.CharField(read_only=True)
     room_categorys = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    rooms = serializers.PrimaryKeyRelatedField(many=True, read_only=True)

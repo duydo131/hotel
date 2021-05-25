@@ -49,20 +49,3 @@ class HotelViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
         rating.save()
         serializer = HotelReadOnlySerializer(hotel)
         return Response(data=serializer.data, status=status.HTTP_201_CREATED)
-
-    @swagger_auto_schema(
-        operation_description="Filter Hotel",
-        # responses={200: UserReadOnlySerializer},
-    )
-    @action(
-        methods=["GET"],
-        detail=False,
-        url_path="filter",
-        url_name="filter",
-        filterset_class=None,
-        permission_classes=[],
-        pagination_class=None,
-    )
-    def filter(self, request, *args, **kwargs):
-        data = {"OK"}
-        return Response(data=data, status=status.HTTP_200_OK)

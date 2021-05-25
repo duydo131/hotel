@@ -4,6 +4,7 @@ from django.db import models
 from safedelete import SOFT_DELETE_CASCADE
 from safedelete.models import SafeDeleteMixin
 
+from apps.rents.models import RentDetail
 from apps.room.models import Room, Service
 
 
@@ -12,22 +13,32 @@ class RoomService(SafeDeleteMixin):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
-    room = models.OneToOneField(
+    room = models.ForeignKey(
         Room,
         on_delete=models.CASCADE,
-        related_name="service",
-        blank=True
+        related_name="services",
+        blank=True,
+        null=True,
+    )
+
+    rent = models.OneToOneField(
+        RentDetail,
+        on_delete=models.CASCADE,
+        related_name="services",
+        blank=True,
+        null=True,
     )
 
     services = models.ManyToManyField(
         Service,
-        related_name="services",
+        related_name="rooms",
         null=True,
         blank=True,
     )
 
     class Meta:
         db_table = "room_service"
+        ordering = ["id"]
 
     def __str__(self):
-        return self.id
+        return str(self.id)

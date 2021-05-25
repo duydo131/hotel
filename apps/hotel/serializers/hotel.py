@@ -26,3 +26,5 @@ class HotelReadOnlySerializer(serializers.Serializer):
     image_url = serializers.CharField(read_only=True)
     category = serializers.CharField(read_only=True)
     rating = RatingSerializer(read_only=True)
+    rooms = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    feedbacks = serializers.PrimaryKeyRelatedField(many=True, read_only=True)

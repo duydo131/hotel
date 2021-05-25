@@ -21,3 +21,4 @@ class FeedbackReadOnlySerializer(serializers.Serializer):
     content = serializers.CharField(read_only=True)
     created_at = serializers.DateTimeField(read_only=True)
     rent = serializers.PrimaryKeyRelatedField(read_only=True)
+    hotel = serializers.PrimaryKeyRelatedField(read_only=True)

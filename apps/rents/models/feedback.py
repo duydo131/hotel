@@ -1,8 +1,11 @@
 import uuid
 
 from django.db import models
+from django.db.models import DO_NOTHING
 from safedelete import SOFT_DELETE_CASCADE
 from safedelete.models import SafeDeleteMixin
+
+from apps.hotel.models import Hotel
 
 
 class Feedback(SafeDeleteMixin):
@@ -16,6 +19,13 @@ class Feedback(SafeDeleteMixin):
     convenirent = models.IntegerField()
     clean = models.IntegerField()
     content = models.TextField(blank=True, null=True)
+    hotel = models.ForeignKey(
+        Hotel,
+        on_delete=DO_NOTHING,
+        related_name="feedbacks",
+        blank=True,
+        null=True,
+    )
 
     created_at = models.DateTimeField(auto_now_add=True)
 

@@ -35,7 +35,9 @@ class UserViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
         user = self.request.user
         if isinstance(user, AnonymousUser) or \
                 not (RolePermissions.ADMIN in [role.name for role in self.request.user.roles.all()]):
+            print(queryset)
             queryset = queryset.exclude(roles=admin)
+            print(queryset)
         return queryset
 
     def perform_create(self, serializer):
