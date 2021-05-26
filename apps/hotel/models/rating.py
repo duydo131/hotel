@@ -20,7 +20,6 @@ class Rating(SafeDeleteMixin):
     hotel = models.OneToOneField(
         Hotel,
         on_delete=models.CASCADE,
-        null=True
     )
 
     created_at = models.DateTimeField(auto_now_add=True)

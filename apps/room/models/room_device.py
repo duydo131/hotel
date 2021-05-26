@@ -15,15 +15,11 @@ class RoomDevice(SafeDeleteMixin):
         Room,
         on_delete=models.CASCADE,
         related_name="room_device",
-        null=True,
-        blank=True
     )
     device = models.ForeignKey(
         Device,
         on_delete=models.CASCADE,
         related_name="room_device",
-        null=True,
-        blank=True
     )
     quantity = models.IntegerField(default=0)
 

@@ -65,12 +65,10 @@ class FeedbackViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
 
                 rent.feedback = feedback
                 rent.save()
-                count = hotel.feedbacks.count()
+                count = hotel.feedbacks.count() - 1
                 rating = hotel.rating
                 updateRating(rating, count, feedback)
                 rating.save()
-                hotel.feedbacks.add(feedback)
-                hotel.save()
                 serializer = FeedbackReadOnlySerializer(feedback)
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
         except Exception:

@@ -24,34 +24,3 @@ class RentDetailViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
         "retrieve": RentDetailReadOnlySerializer,
     }
     filterset_class = RentDetailFilterSet
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        id_detail = dict(serializer.data)['id']
-        detail = RentDetail.objects.get(id=id_detail)
-        if not detail:
-            raise APIException(
-                _("Cannot create room"),
-                status.HTTP_500_INTERNAL_SERVER_ERROR,
-            )
-        id_rent = request.data['rent']
-        id_room = request.data['room']
-        rent = Rent.objects.get(id=id_rent)
-        room = Room.objects.get(id=id_room)
-        if not rent and not room:
-            raise APIException(
-                _("Error Server"),
-                status.HTTP_500_INTERNAL_SERVER_ERROR,
-            )
-        detail.rent = rent
-        detail.room = room
-        serializer = RentDetailReadOnlySerializer(detail)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-
-
-
-
-

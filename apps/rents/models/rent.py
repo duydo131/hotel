@@ -18,8 +18,6 @@ class Rent(SafeDeleteMixin):
         "users.User",
         on_delete=models.CASCADE,
         related_name="rents",
-        blank=True,
-        null=True,
     )
     feedback = models.OneToOneField(
         Feedback,
@@ -28,7 +26,6 @@ class Rent(SafeDeleteMixin):
         blank=True,
         null=True,
     )
-
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

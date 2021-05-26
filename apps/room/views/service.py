@@ -35,7 +35,6 @@ class ServiceViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
                 _("Cannot create service"),
                 status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
-        print(request.data['category'])
         try:
             category = [RoomCategory.objects.get(id=id_cat) for id_cat in request.data['category']]
             for cat in category:

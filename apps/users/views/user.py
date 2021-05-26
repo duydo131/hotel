@@ -44,7 +44,8 @@ class UserViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
         serializer.save()
         role_guest = Role.objects.get(name=RolePermissions.GUEST)
         user = dict(serializer.data)
-        new_user = User.objects.get(id=user['id']);
+        print(serializer.data)
+        new_user = User.objects.get(id=user['id'])
         if not role_guest or not new_user:
             raise APIException(
                 _("Cannot create user"),

@@ -16,16 +16,12 @@ class Room(SafeDeleteMixin):
         Hotel,
         on_delete=models.CASCADE,
         related_name="rooms",
-        blank=True,
-        null=True
     )
     name = models.CharField(max_length=20, null=True, blank=True)
     category = models.ForeignKey(
         RoomCategory,
         on_delete=models.CASCADE,
         related_name="rooms",
-        null=True,
-        blank=True
     )
     price = models.BigIntegerField(blank=True)
     price_now = models.BigIntegerField(blank=True, null=True)
@@ -33,7 +29,7 @@ class Room(SafeDeleteMixin):
     image_url = models.CharField(max_length=100, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     adult = models.IntegerField(default=1)
-    children = models.IntegerField(default=1)
+    children = models.IntegerField(default=0)
 
     class Meta:
         db_table = "room"

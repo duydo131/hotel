@@ -16,15 +16,11 @@ class RentDetail(SafeDeleteMixin):
         Rent,
         on_delete=models.CASCADE,
         related_name="details",
-        blank=True,
-        null=True,
     )
     room = models.ForeignKey(
         Room,
         on_delete=models.CASCADE,
         related_name="details",
-        blank=True,
-        null=True,
     )
     price = models.BigIntegerField(blank=True, null=True)
     voucher = models.FloatField(blank=True, null=True)

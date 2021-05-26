@@ -36,7 +36,6 @@ class IsEmployee(BasePermission):
             return True
         if isinstance(request.user, AnonymousUser):
             return False
-
         return RolePermissions.EMPLOYEE in [role.name for role in request.user.roles.all()] \
                and request.user.is_authenticated
 

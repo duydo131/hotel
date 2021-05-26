@@ -17,8 +17,6 @@ class RoomService(SafeDeleteMixin):
         Room,
         on_delete=models.CASCADE,
         related_name="services",
-        blank=True,
-        null=True,
     )
 
     rent = models.OneToOneField(

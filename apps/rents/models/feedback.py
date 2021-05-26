@@ -23,8 +23,6 @@ class Feedback(SafeDeleteMixin):
         Hotel,
         on_delete=DO_NOTHING,
         related_name="feedbacks",
-        blank=True,
-        null=True,
     )
 
     created_at = models.DateTimeField(auto_now_add=True)

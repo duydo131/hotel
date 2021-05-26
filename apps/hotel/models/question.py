@@ -21,8 +21,6 @@ class Question(SafeDeleteMixin):
     user = models.ForeignKey(
         User,
         related_name="questions",
-        blank=True,
-        null=True,
     )
     content = models.TextField(null=True, blank=True)
     like = models.IntegerField(null=True, blank=True)
