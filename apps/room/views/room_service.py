@@ -44,18 +44,12 @@ class RoomServiceViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
                         _("Cannot add service"),
                         status.HTTP_500_INTERNAL_SERVER_ERROR,
                     )
-                id_room = request.data['room']
                 services = request.data['services']
-                rent_id = request.data['rent']
-
-                room = Room.objects.get(id=id_room)
-                rent = RentDetail.objects.get(id=rent_id)
-                list_service = [Service.objects.get(id=service_id) for service_id in services]
-                room_service.room = room
-                room_service.rent = rent
-                for service in list_service:
-                    room_service.services.add(service)
-                room_service.save()
+                if len(services) > 0:
+                    list_service = Service.objects.get(id__in=services)
+                    for service in list_service:
+                        room_service.services.add(service)
+                    room_service.save()
                 serializer = RoomServiceReadOnlySerializer(room_service)
                 return Response(data=serializer.data, status=status.HTTP_201_CREATED)
         except Exception as e:

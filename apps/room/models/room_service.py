@@ -19,14 +19,6 @@ class RoomService(SafeDeleteMixin):
         related_name="services",
     )
 
-    rent = models.OneToOneField(
-        RentDetail,
-        on_delete=models.CASCADE,
-        related_name="services",
-        blank=True,
-        null=True,
-    )
-
     services = models.ManyToManyField(
         Service,
         related_name="rooms",

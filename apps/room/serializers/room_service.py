@@ -13,4 +13,3 @@ class RoomServiceReadOnlySerializer(serializers.Serializer):
     id = serializers.UUIDField(read_only=True)
     services = serializers.PrimaryKeyRelatedField(many= True, read_only=True)
     room = serializers.PrimaryKeyRelatedField(read_only=True)
-    rent = serializers.PrimaryKeyRelatedField(read_only=True)

@@ -35,16 +35,13 @@ class UserViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
         user = self.request.user
         if isinstance(user, AnonymousUser) or \
                 not (RolePermissions.ADMIN in [role.name for role in self.request.user.roles.all()]):
-            print(queryset)
             queryset = queryset.exclude(roles=admin)
-            print(queryset)
         return queryset
 
     def perform_create(self, serializer):
         serializer.save()
         role_guest = Role.objects.get(name=RolePermissions.GUEST)
         user = dict(serializer.data)
-        print(serializer.data)
         new_user = User.objects.get(id=user['id'])
         if not role_guest or not new_user:
             raise APIException(

@@ -18,4 +18,3 @@ class RentDetailReadOnlySerializer(serializers.Serializer):
     voucher = serializers.FloatField(read_only=True)
     created_at = serializers.DateTimeField(read_only=True)
     updated_at = serializers.DateTimeField(read_only=True)
-    services = serializers.PrimaryKeyRelatedField(read_only=True)
