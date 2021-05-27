@@ -50,6 +50,7 @@ class UserViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
             )
 
         new_user.roles.add(role_guest)
+        new_user.set_password(new_user.password)
         new_user.save()
 
     @swagger_auto_schema(

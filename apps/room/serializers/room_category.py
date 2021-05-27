@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.validators import UniqueValidator
 
 from apps.room.models import RoomCategory
 
@@ -12,7 +13,7 @@ class RoomCategorySerializer(serializers.ModelSerializer):
 class RoomCategoryReadOnlySerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
     fid = serializers.CharField(read_only=True)
-    name = serializers.CharField(read_only=True)
+    name = serializers.CharField(read_only=True, validators=[UniqueValidator(queryset=RoomCategory.objects.all())])
     description = serializers.CharField(read_only=True)
     services = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     rooms = serializers.PrimaryKeyRelatedField(many=True, read_only=True)

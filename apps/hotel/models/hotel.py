@@ -19,6 +19,7 @@ class Hotel(SafeDeleteMixin):
     nation = models.CharField(max_length=20, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     stars = models.IntegerField(null=True, blank=True)
+
     image_url = models.CharField(max_length=100, null=True, blank=True)
     category = models.CharField(max_length=50, null=True, blank=True)
 

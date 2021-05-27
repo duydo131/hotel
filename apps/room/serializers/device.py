@@ -13,7 +13,7 @@ class DeviceReadOnlySerializer(serializers.Serializer):
     id = serializers.UUIDField(read_only=True)
     fid = serializers.CharField(read_only=True)
     name = serializers.CharField(read_only=True)
-    price = serializers.IntegerField(read_only=True)
+    price = serializers.IntegerField(read_only=True, min_value=0)
     image_url = serializers.CharField(read_only=True)
 
 

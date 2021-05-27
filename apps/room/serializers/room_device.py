@@ -15,4 +15,4 @@ class RoomDeviceReadOnlySerializer(serializers.Serializer):
     fid = serializers.CharField(read_only=True)
     room = serializers.PrimaryKeyRelatedField(read_only=True)
     device = DeviceReadOnlySerializer(read_only=True)
-    quantity = serializers.IntegerField(default=0)
+    quantity = serializers.IntegerField(default=0, min_value=0)

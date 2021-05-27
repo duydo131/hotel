@@ -125,3 +125,8 @@ venv.bak/
 # Static files
 static/
 migrations/*
+
+#file temporary
+.id
+.token
+.url
