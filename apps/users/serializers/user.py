@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from rest_framework.validators import UniqueValidator
 
 from apps.users.models.user import User
 
@@ -16,9 +15,9 @@ class UserReadOnlySerializer(serializers.Serializer):
     fid = serializers.CharField(read_only=True)
     name = serializers.CharField(read_only=True)
     hotel = serializers.PrimaryKeyRelatedField(read_only=True)
-    phone = serializers.CharField(read_only=True, validators=[UniqueValidator(queryset=User.objects.all())])
-    email = serializers.EmailField(read_only=True, validators=[UniqueValidator(queryset=User.objects.all())])
-    address = serializers.CharField(read_only=True, validators=[UniqueValidator(queryset=User.objects.all())])
+    phone = serializers.CharField(read_only=True)
+    email = serializers.EmailField(read_only=True)
+    address = serializers.CharField(read_only=True)
     avatar_url = serializers.CharField(read_only=True)
     gender = serializers.CharField(read_only=True)
     roles = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
