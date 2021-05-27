@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.room.models import Service
+from apps.room.models.service import Service
 
 
 class ServiceSerializer(serializers.ModelSerializer):

@@ -13,6 +13,7 @@ from safedelete.models import SafeDeleteMixin
 from apps.hotel.models import Hotel
 from apps.users.models.user_manager import CustomUserManager
 from apps.users.models.role import Role, RolePermissions
+from core.customer_manager import BaseBulkSafeDeleteModel
 
 
 class UserGender(models.TextChoices):
@@ -54,12 +55,13 @@ class User(SafeDeleteMixin, AbstractBaseUser):
         null=True,
         blank=True,
     )
+    is_superuser = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     @property
     def is_staff(self):
-        return RolePermissions.EMPLOYEE in [self.roles.name]
+        return RolePermissions.ADMIN in [role.name for role in self.roles.all()]
 
     @property
     def token(self):

@@ -4,6 +4,7 @@ from django.db import models
 from safedelete import SOFT_DELETE_CASCADE
 from safedelete.models import SafeDeleteMixin
 
+from apps.room.models.service import Service
 from apps.room.models.room_category import RoomCategory
 from apps.hotel.models import Hotel
 
@@ -22,6 +23,12 @@ class Room(SafeDeleteMixin):
         RoomCategory,
         on_delete=models.CASCADE,
         related_name="rooms",
+    )
+    services = models.ManyToManyField(
+        Service,
+        related_name="rooms",
+        null=True,
+        blank=True,
     )
     price = models.BigIntegerField(blank=True)
     price_now = models.BigIntegerField(blank=True, null=True)

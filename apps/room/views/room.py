@@ -1,8 +1,11 @@
+from django.db import transaction
 from rest_framework import viewsets
+from rest_framework.decorators import action
 
 from apps.hotel.models import Hotel
 from apps.room.filters import RoomFilterSet
 from apps.room.models import Room, RoomCategory
+from apps.room.models.service import Service
 from apps.room.serializers import RoomSerializer, RoomReadOnlySerializer
 from core.mixins import GetSerializerClassMixin
 from core.permissions import IsAdmin, IsEmployee
@@ -24,9 +27,3 @@ class RoomViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
         "retrieve": RoomReadOnlySerializer,
     }
     filterset_class = RoomFilterSet
-
-
-
-
-
-

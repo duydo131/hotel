@@ -4,10 +4,11 @@ from django.db.models.signals import post_save
 from safedelete import SOFT_DELETE_CASCADE
 from safedelete.models import SafeDeleteModel, SafeDeleteManager
 
+
 class CustomBulkSafeDeleteManager(SafeDeleteManager):
     
     def bulk_create(self, objs, **kwargs):
-        a = super(models.Manager,self).bulk_create(objs,**kwargs)
+        a = super(models.Manager, self).bulk_create(objs, **kwargs)
         for i in objs:
             post_save.send(i.__class__, instance=i, created=True, **kwargs)
         return a
@@ -19,16 +20,20 @@ class CustomBulkSafeDeleteManager(SafeDeleteManager):
             post_save.send(i.__class__, instance=i, created=False, **kwargs)
         return ret
 
+
 class BaseSafeDeleteModel(SafeDeleteModel):
     _safedelete_policy = SOFT_DELETE_CASCADE
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
     class Meta:
         abstract = True
 
+
 class BaseBulkSafeDeleteModel(BaseSafeDeleteModel):
     objects = CustomBulkSafeDeleteManager()
+
     class Meta:
         abstract = True
 

@@ -4,15 +4,10 @@ from apps.rents.filters import RentFilterSet
 from apps.rents.models import Rent
 from apps.rents.serializers.rent import RentSerializer, RentReadOnlySerializer
 from core.mixins import GetSerializerClassMixin
-from core.permissions import IsCustomer
-from django.utils.translation import gettext_lazy as _
-from rest_framework.exceptions import APIException
-from rest_framework import status
-from rest_framework.response import Response
 
 
 class RentViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
-    permission_classes = [IsCustomer]
+    permission_classes = []
 
     queryset = Rent.objects.filter()
 

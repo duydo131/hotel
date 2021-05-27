@@ -136,6 +136,7 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_RENDERER_CLASSES": [
         "core.custom_json_renderer.CustomJSONRenderer",
+        'rest_framework.renderers.BrowsableAPIRenderer',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',

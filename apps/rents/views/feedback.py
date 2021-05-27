@@ -29,6 +29,8 @@ class FeedbackViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
 
     serializer_class = FeedbackSerializer
 
+    action = ""
+
     serializer_action_classes = {
         "list": FeedbackReadOnlySerializer,
         "retrieve": FeedbackReadOnlySerializer,
@@ -76,10 +78,3 @@ class FeedbackViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
                 _("Error Server"),
                 status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
-
-
-
-
-
-
-

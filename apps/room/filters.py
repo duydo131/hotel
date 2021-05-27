@@ -27,7 +27,7 @@ class RoomCategoryFilterSet(django_filters.FilterSet):
 
 
 class ServiceFilterSet(django_filters.FilterSet):
-    room = django_filters.CharFilter(lookup_expr="exact", field_name="room_categorys__rooms__id")
+    room = django_filters.CharFilter(lookup_expr="exact", field_name="rooms__id")
 
 
 class DeviceFilterSet(django_filters.FilterSet):

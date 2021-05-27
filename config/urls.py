@@ -30,7 +30,6 @@ from apps.room.views.device import DeviceViewSet
 from apps.room.views.room import RoomViewSet
 from apps.room.views.room_category import RoomCategoryViewSet
 from apps.room.views.room_device import RoomDeviceViewSet
-from apps.room.views.room_service import RoomServiceViewSet
 from apps.room.views.service import ServiceViewSet
 from apps.users.views import UserViewSet
 
@@ -66,7 +65,6 @@ api_router.register("rent", RentViewSet, basename="rent")
 api_router.register("rent_detail", RentDetailViewSet, basename="rent_detail")
 api_router.register("feedback", FeedbackViewSet, basename="feedback")
 api_router.register("rating", RatingViewSet, basename="rating")
-api_router.register("room_service", RoomServiceViewSet, basename="room_service")
 
 admin.autodiscover()
 

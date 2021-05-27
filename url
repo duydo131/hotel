@@ -1,3 +1,33 @@
+
+// get hotel
 127.0.0.1:8000/api/v1/hotel?address=Sapa&adult=2&children=2&day_before=2021-05-12&day_after=2021-05-14
 
+// get room
 127.0.0.1:8000/api/v1/room?hotel=d5b6b4d8-adb0-40f9-bf4f-3b0d6b4f3946&day_before=2021-05-12&day_after=2021-05-14
+id : fa40feb8-4575-4edc-83c4-40964b15504f
+
+
+// create rent
+127.0.0.1:8000/api/v1/rent
+{
+    "start_date": "2021-05-12",
+    "end_date": "2021-05-14"
+}
+id : fb6ccf01-f356-465c-aa45-0f8b7ae2b0ec
+
+// create rent_detail
+{
+    "rent": "fb6ccf01-f356-465c-aa45-0f8b7ae2b0ec",
+    "room": "fa40feb8-4575-4edc-83c4-40964b15504f"
+}
+
+// get service of room
+127.0.0.1:8000/api/v1/service?room=fa40feb8-4575-4edc-83c4-40964b15504f
+
+
+
+token customer
+eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjQ1NzFhOTM3LTMyNGUtNDBhMy1hYjlkLTZiYWU2ZDUwODk2MiIsIm5hbWUiOiJjdXN0b21lciIsInBob25lIjpudWxsLCJlbWFpbCI6bnVsbCwiZXhwIjoxNjI3Mjk3ODM2LCJpYXQiOjE2MjIxMTM4MzZ9.G3CadurO_Qq4kJhTQJgmhL8lgeTKKpxOzPukEDlpMuo
+
+token employee
+eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjUzNThmMmNiLWViM2ItNGMzZS04M2E1LWRmYzE2NjA1ZTIxMCIsIm5hbWUiOiJlbXBsb3llZSIsInBob25lIjpudWxsLCJlbWFpbCI6bnVsbCwiZXhwIjoxNjI3Mjk5NTEyLCJpYXQiOjE2MjIxMTU1MTJ9.wHN71qTwpUNZlqXO2_X8XM6LoPaCjoOrD3ZoxJ5-LO8

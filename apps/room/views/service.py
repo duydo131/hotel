@@ -5,7 +5,8 @@ from rest_framework.exceptions import APIException
 from rest_framework.response import Response
 from apps.room.filters import ServiceFilterSet
 from django.utils.translation import gettext_lazy as _
-from apps.room.models import Service, RoomCategory
+from apps.room.models import RoomCategory
+from apps.room.models.service import Service
 from apps.room.serializers.service import ServiceSerializer, ServiceReadOnlySerializer
 from core.mixins import GetSerializerClassMixin
 from core.permissions import IsEmployee
@@ -35,17 +36,18 @@ class ServiceViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
                 _("Cannot create service"),
                 status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
-        try:
-            category = [RoomCategory.objects.get(id=id_cat) for id_cat in request.data['category']]
-            for cat in category:
-                cat.services.add(service)
-                cat.save()
-        except Exception as e:
-            print(e)
-            raise APIException(
-                _("Error Server"),
-                status.HTTP_500_INTERNAL_SERVER_ERROR,
-            )
+        category = request.data['category']
+        if category:
+            try:
+                category_model = [RoomCategory.objects.get(id=id_cat) for id_cat in category]
+                for cat in category_model:
+                    cat.services.add(service)
+                    cat.save()
+            except Exception:
+                raise APIException(
+                    _("Error Server"),
+                    status.HTTP_500_INTERNAL_SERVER_ERROR,
+                )
         serializer = ServiceReadOnlySerializer(service)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
