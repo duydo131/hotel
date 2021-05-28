@@ -15,7 +15,7 @@ class HotelReadOnlySerializer(serializers.Serializer):
     id = serializers.UUIDField(read_only=True)
     staff = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     fid = serializers.CharField(read_only=True)
-    name = serializers.CharField(read_only=True, validators=[UniqueValidator(queryset=Hotel.objects.all())])
+    name = serializers.CharField(read_only=True)#, validators=[UniqueValidator(queryset=Hotel.objects.all())])
     phone = serializers.CharField(read_only=True)
     email = serializers.CharField(read_only=True)
     fax = serializers.CharField(read_only=True)

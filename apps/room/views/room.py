@@ -1,9 +1,13 @@
-from rest_framework import viewsets
+from django.db import transaction
+from rest_framework import viewsets, status
+from rest_framework.exceptions import APIException
+from django.utils.translation import gettext_lazy as _
 from apps.room.filters import RoomFilterSet
 from apps.room.models import Room
 from apps.room.serializers import RoomSerializer, RoomReadOnlySerializer
 from core.mixins import GetSerializerClassMixin
 from core.permissions import IsEmployee
+from rest_framework.response import Response
 
 
 class RoomViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
@@ -18,3 +22,22 @@ class RoomViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
         "retrieve": RoomReadOnlySerializer,
     }
     filterset_class = RoomFilterSet
+
+    def create(self, request, *args, **kwargs):
+        try:
+            with transaction.atomic():
+                serializer = self.get_serializer(data=request.data)
+                serializer.is_valid(raise_exception=True)
+                self.perform_create(serializer)
+                room = Room.objects.get(id=dict(serializer.data)['id'])
+                for service in room.category.services.all():
+                    room.services.add(service)
+                room.save()
+                data = RoomSerializer(room)
+                headers = self.get_success_headers(data)
+                return Response(data.data, status=status.HTTP_201_CREATED, headers=headers)
+        except:
+            raise APIException(
+                _("Don't create room!"),
+                status.HTTP_404_NOT_FOUND,
+            )

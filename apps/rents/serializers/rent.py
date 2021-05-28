@@ -7,6 +7,12 @@ class RentSerializer(serializers.ModelSerializer):
         model = Rent
         fields = '__all__'
 
+    def validate(self, data):
+        print(data['start_date'], data['end_date'])
+        if data['start_date'] > data['end_date']:
+            raise serializers.ValidationError("Finish must occur after start")
+        return data
+
 
 class RentReadOnlySerializer(serializers.Serializer):
     id = serializers.UUIDField(read_only=True)
@@ -20,8 +26,3 @@ class RentReadOnlySerializer(serializers.Serializer):
     created_at = serializers.DateTimeField(read_only=True)
     updated_at = serializers.DateTimeField(read_only=True)
     feedback = serializers.PrimaryKeyRelatedField(read_only=True)
-
-    def validate(self, data):
-        if data['start_date'] > data['end_date']:
-            raise serializers.ValidationError("Finish must occur after start")
-        return data

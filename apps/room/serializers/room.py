@@ -9,6 +9,16 @@ class RoomSerializer(serializers.ModelSerializer):
         model = Room
         fields = '__all__'
 
+    def validate(self, data):
+        try:
+            hotel = Hotel.objects.get(id=data['hotel'])
+            if data['name'] in [room.name for room in hotel.rooms.all()]:
+                raise Exception("Error")
+        except Exception:
+            raise serializers.ValidationError("Room name in hotel is unique")
+
+        return data
+
 
 class RoomReadOnlySerializer(serializers.Serializer):
     id = serializers.UUIDField(read_only=True)
@@ -25,13 +35,3 @@ class RoomReadOnlySerializer(serializers.Serializer):
     children = serializers.IntegerField(read_only=True, min_value=0)
     room_device = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     services = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
-
-    def validate(self, data):
-        try:
-            hotel = Hotel.objects.get(id=data['hotel'])
-            if data['name'] in [room.name for room in hotel.rooms.all()]:
-                raise Exception("Error")
-        except Exception:
-            raise serializers.ValidationError("Room name in hotel is unique")
-
-        return data

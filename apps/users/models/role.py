@@ -2,7 +2,7 @@ import uuid
 
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from safedelete import SOFT_DELETE_CASCADE
+from safedelete import SOFT_DELETE_CASCADE, HARD_DELETE
 from safedelete.models import SafeDeleteMixin
 
 
@@ -14,7 +14,7 @@ class RolePermissions(models.TextChoices):
 
 
 class Role(SafeDeleteMixin):
-    _safedelete_policy = SOFT_DELETE_CASCADE
+    _safedelete_policy = HARD_DELETE
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(

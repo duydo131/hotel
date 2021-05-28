@@ -38,8 +38,10 @@ class UserViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
             queryset = queryset.exclude(roles=admin)
         return queryset
 
-    def perform_create(self, serializer):
-        serializer.save()
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
         role_guest = Role.objects.get(name=RolePermissions.GUEST)
         user = dict(serializer.data)
         new_user = User.objects.get(id=user['id'])
@@ -52,6 +54,8 @@ class UserViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
         new_user.roles.add(role_guest)
         new_user.set_password(new_user.password)
         new_user.save()
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     @swagger_auto_schema(
         operation_description="Get me",

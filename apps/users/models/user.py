@@ -7,7 +7,7 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.db import models
 from django.db.models import DO_NOTHING
 from django.utils.translation import gettext_lazy as _
-from safedelete import SOFT_DELETE_CASCADE
+from safedelete import SOFT_DELETE_CASCADE, HARD_DELETE
 from safedelete.models import SafeDeleteMixin
 
 from apps.hotel.models import Hotel
@@ -23,7 +23,7 @@ class UserGender(models.TextChoices):
 
 
 class User(SafeDeleteMixin, AbstractBaseUser):
-    _safedelete_policy = SOFT_DELETE_CASCADE
+    _safedelete_policy = HARD_DELETE
     USERNAME_FIELD = "username"
 
     objects = CustomUserManager()

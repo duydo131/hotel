@@ -13,7 +13,6 @@ class UserSerializer(serializers.ModelSerializer):
 class UserReadOnlySerializer(serializers.Serializer):
     id = serializers.UUIDField(read_only=True)
     fid = serializers.CharField(read_only=True)
-    name = serializers.CharField(read_only=True)
     hotel = serializers.PrimaryKeyRelatedField(read_only=True)
     phone = serializers.CharField(read_only=True)
     email = serializers.EmailField(read_only=True)

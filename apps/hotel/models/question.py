@@ -1,7 +1,7 @@
 import uuid
 
 from django.db import models
-from safedelete import SOFT_DELETE_CASCADE
+from safedelete import SOFT_DELETE_CASCADE, HARD_DELETE
 from safedelete.models import SafeDeleteMixin
 
 from apps.hotel.models import Hotel
@@ -9,7 +9,7 @@ from apps.users.models import User
 
 
 class Question(SafeDeleteMixin):
-    _safedelete_policy = SOFT_DELETE_CASCADE
+    _safedelete_policy = HARD_DELETE
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     hotel = models.ManyToManyField(
