@@ -127,6 +127,6 @@ static/
 migrations/*
 
 #file temporary
-.id
-.token
-.url
+id
+token
+url
