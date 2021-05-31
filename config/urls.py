@@ -23,6 +23,7 @@ from rest_framework.routers import SimpleRouter
 
 from apps.hotel.views.hotel import HotelViewSet
 from apps.hotel.views.rating import RatingViewSet
+from apps.notification.views.notification import NotificationViewSet
 from apps.rents.views import FeedbackViewSet
 from apps.rents.views.rent import RentViewSet
 from apps.rents.views.rent_detail import RentDetailViewSet
@@ -65,6 +66,7 @@ api_router.register("rent", RentViewSet, basename="rent")
 api_router.register("rent_detail", RentDetailViewSet, basename="rent_detail")
 api_router.register("feedback", FeedbackViewSet, basename="feedback")
 api_router.register("rating", RatingViewSet, basename="rating")
+api_router.register("notification", NotificationViewSet, basename="notification")
 
 admin.autodiscover()
 

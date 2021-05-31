@@ -1,13 +1,32 @@
-from rest_framework import viewsets
+from django.db import transaction
+from rest_framework import viewsets, status
+from django.utils.translation import gettext_lazy as _
+from rest_framework.exceptions import APIException
 
+from apps.hotel.models import Hotel
+from apps.notification.models import Notification, NotificationType
+from apps.notification.serializers import NotificationSerializer
 from apps.rents.filters import RentFilterSet
 from apps.rents.models import Rent
+from apps.rents.serializers import RentDetailSerializer
 from apps.rents.serializers.rent import RentSerializer, RentReadOnlySerializer
 from core.mixins import GetSerializerClassMixin
+from core.permissions import IsCustomer
+
+
+def create_model(data, Serializer):
+    try:
+        with transaction.atomic():
+            serializer = Serializer(data=data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return serializer
+    except Exception as e:
+        raise Exception
 
 
 class RentViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
-    permission_classes = []
+    permission_classes = [IsCustomer]
 
     queryset = Rent.objects.filter()
 
@@ -20,11 +39,29 @@ class RentViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
     filterset_class = RentFilterSet
 
     def create(self, request, *args, **kwargs):
-        request.data['user'] = request.user.id
-        return super().create(request, *args, **kwargs)
+        try:
+            with transaction.atomic():
+                request.data['user'] = request.user.id
+                x = super().create(request, *args, **kwargs)
+                rent_id = x.data['id']
+                details = request.data['details']
+                rooms = []
+                for detail in details:
+                    detail['rent'] = rent_id
+                    rooms.append(detail['room'])
+                    create_model(detail, RentDetailSerializer)
 
+                hotel = Hotel.objects.filter(rooms__id__in=rooms).distinct().first()
+                notificationData = {'rent': rent_id, 'type': NotificationType.RENT, 'hotel': hotel.id}
+                create_model(notificationData, NotificationSerializer)
 
-
-
-
-
+                # 1 user chỉ đặt 1 khách sạn
+                staffs = hotel.staff.all()
+                for staff in staffs:
+                    print("Gửi thông báo cho nhân viên khách sạn. {id}".format(id=staff.id))
+                return x
+        except:
+            raise APIException(
+                _("Cannot create rent detail!!"),
+                status.HTTP_404_NOT_FOUND,
+            )

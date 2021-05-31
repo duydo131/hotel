@@ -2,13 +2,13 @@ from rest_framework import serializers
 
 from apps.rents.models import Rent
 
+
 class RentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Rent
         fields = '__all__'
 
     def validate(self, data):
-        print(data['start_date'], data['end_date'])
         if data['start_date'] > data['end_date']:
             raise serializers.ValidationError("Finish must occur after start")
         return data
@@ -26,3 +26,4 @@ class RentReadOnlySerializer(serializers.Serializer):
     created_at = serializers.DateTimeField(read_only=True)
     updated_at = serializers.DateTimeField(read_only=True)
     feedback = serializers.PrimaryKeyRelatedField(read_only=True)
+    status = serializers.BooleanField(read_only=True)

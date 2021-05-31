@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import AnonymousUser
+from django.db import transaction
 from django.utils.translation import gettext_lazy as _
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets, status, exceptions
@@ -37,25 +38,6 @@ class UserViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
                 not (RolePermissions.ADMIN in [role.name for role in self.request.user.roles.all()]):
             queryset = queryset.exclude(roles=admin)
         return queryset
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        role_guest = Role.objects.get(name=RolePermissions.GUEST)
-        user = dict(serializer.data)
-        new_user = User.objects.get(id=user['id'])
-        if not role_guest or not new_user:
-            raise APIException(
-                _("Cannot create user"),
-                status.HTTP_500_INTERNAL_SERVER_ERROR,
-            )
-
-        new_user.roles.add(role_guest)
-        new_user.set_password(new_user.password)
-        new_user.save()
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     @swagger_auto_schema(
         operation_description="Get me",
@@ -115,3 +97,37 @@ class UserViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
         token = user.token
         data = {"token": token}
         return Response(data=data, status=status.HTTP_200_OK)
+
+    @action(
+        methods=["POST"],
+        detail=False,
+        url_path="register",
+        url_name="register",
+        filterset_class=None,
+        permission_classes=[],
+        pagination_class=None,
+    )
+    def register(self, request, *args, **kwargs):
+        serializer = LoginSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        password = serializer.validated_data["password"]
+        try:
+            with transaction.atomic():
+                serializer = self.get_serializer(data=request.data)
+                serializer.is_valid(raise_exception=True)
+                self.perform_create(serializer)
+                role_customer = Role.objects.get(name=RolePermissions.CUSTOMER)
+                user = dict(serializer.data)
+                new_user = User.objects.get(id=user['id'])
+                if not role_customer or not new_user:
+                    raise Exception
+                new_user.roles.add(role_customer)
+                new_user.set_password(password)
+                new_user.save()
+        except:
+            raise APIException(_("Cannot register user"), status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        token = new_user.token
+        data = {"token": token}
+        return Response(data=data, status=status.HTTP_200_OK)
+

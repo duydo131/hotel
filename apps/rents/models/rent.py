@@ -26,7 +26,7 @@ class Rent(SafeDeleteMixin):
         blank=True,
         null=True,
     )
-
+    status = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

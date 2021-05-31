@@ -5,11 +5,11 @@ from apps.room.models import RoomCategory
 from apps.room.serializers import RoomSerializer
 from apps.room.serializers.room_category import RoomCategorySerializer
 from core.mixins import GetSerializerClassMixin
-from core.permissions import IsCustomer
+from core.permissions import IsCustomer, IsEmployee
 
 
 class RoomCategoryViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
-    permission_classes = [IsCustomer]
+    permission_classes = [IsEmployee]
 
     queryset = RoomCategory.objects.filter()
 
