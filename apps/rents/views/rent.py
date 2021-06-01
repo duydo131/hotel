@@ -12,17 +12,8 @@ from apps.rents.serializers import RentDetailSerializer
 from apps.rents.serializers.rent import RentSerializer, RentReadOnlySerializer
 from core.mixins import GetSerializerClassMixin
 from core.permissions import IsCustomer
-
-
-def create_model(data, Serializer):
-    try:
-        with transaction.atomic():
-            serializer = Serializer(data=data)
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-            return serializer
-    except Exception as e:
-        raise Exception
+from core.utils import create_model
+from templates.notification import notification
 
 
 class RentViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
@@ -52,16 +43,17 @@ class RentViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
                     create_model(detail, RentDetailSerializer)
 
                 hotel = Hotel.objects.filter(rooms__id__in=rooms).distinct().first()
-                notificationData = {'rent': rent_id, 'type': NotificationType.RENT, 'hotel': hotel.id}
-                create_model(notificationData, NotificationSerializer)
 
-                # 1 user chỉ đặt 1 khách sạn
-                staffs = hotel.staff.all()
-                for staff in staffs:
-                    print("Gửi thông báo cho nhân viên khách sạn. {id}".format(id=staff.id))
+                # notification cho nhaan vieen
+                notification(rent_id, NotificationType.RENT, hotel.id)
                 return x
         except:
             raise APIException(
                 _("Cannot create rent detail!!"),
                 status.HTTP_404_NOT_FOUND,
             )
+
+    def list(self, request, *args, **kwargs):
+        x = notification.apply_async(queue='low_priority', args=(0, 0, 0))
+        print(x)
+        return super().list(request, *args, **kwargs)

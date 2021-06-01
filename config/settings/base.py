@@ -43,6 +43,7 @@ THIRD_PARTY_APPS = [
     'rest_framework',
     'django_filters',
     'drf_yasg',
+    'django_celery_results',
 ]
 
 LOCAL_APPS = [

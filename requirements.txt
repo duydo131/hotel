@@ -16,3 +16,5 @@ urllib3==1.25.11
 chardet==3.0.4
 apns2==0.7.2
 ipython==7.16.1
+redis==3.2.0
+django-celery-results==2.0.1
