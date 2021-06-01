@@ -45,7 +45,7 @@ class RentViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
                 hotel = Hotel.objects.filter(rooms__id__in=rooms).distinct().first()
 
                 # notification cho nhaan vieen
-                notification(rent_id, NotificationType.RENT, hotel.id)
+                notification.delay(rent_id, NotificationType.RENT, hotel.id)
                 return x
         except:
             raise APIException(
