@@ -12,18 +12,35 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
       - ./db_entrypoint.sh:/docker-entrypoint-initdb.d/db_entrypoint.sh
+    networks:
+      - djangonetwork
+
+  redis:
+    image: redis:6.2.3
+    ports:
+      - "6379:6379"
+    networks:
+      - djangonetwork
 
   api:
     build:
       context: .
       dockerfile: Dockerfile
+    command: python manage.py runserver 0.0.0.0:8000
     environment:
       DB_HOST: db
     ports:
       - "8000:8000"
     depends_on:
       - db
+      - redis
+    networks:
+      - djangonetwork
 
 volumes:
   postgres-data:
     external: false
+
+networks:
+  djangonetwork:
+    driver: bridge
