@@ -18,7 +18,8 @@ from apps.rents.task import notification
 class RentViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
     permission_classes = [IsCustomer]
 
-    queryset = Rent.objects.filter()
+    queryset = Rent.objects.all()
+    queryset_detail = Rent.objects.all()
 
     serializer_class = RentSerializer
 
@@ -31,17 +32,19 @@ class RentViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         try:
             with transaction.atomic():
+                details = request.data['details']
+                rooms = [detail['room'] for detail in details]
+                hotel = Hotel.objects.filter(rooms__id__in=rooms).distinct().first()
+
                 request.data['user'] = request.user.id
+                request.data['hotel'] = hotel.id
                 x = super().create(request, *args, **kwargs)
                 rent_id = x.data['id']
-                details = request.data['details']
-                rooms = []
+
                 for detail in details:
                     detail['rent'] = rent_id
-                    rooms.append(detail['room'])
                     create_model(detail, RentDetailSerializer)
 
-                hotel = Hotel.objects.filter(rooms__id__in=rooms).distinct().first()
                 notification.apply_async(args=[rent_id, NotificationType.RENT, hotel.id])
                 return x
         except:

@@ -9,7 +9,7 @@ class RentSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def validate(self, data):
-        if data['start_date'] > data['end_date']:
+        if not self.instance and data['start_date'] > data['end_date']:
             raise serializers.ValidationError("Finish must occur after start")
         return data
 
@@ -27,3 +27,5 @@ class RentReadOnlySerializer(serializers.Serializer):
     updated_at = serializers.DateTimeField(read_only=True)
     feedback = serializers.PrimaryKeyRelatedField(read_only=True)
     status = serializers.BooleanField(read_only=True)
+    done = serializers.BooleanField(read_only=True)
+    hotel = serializers.PrimaryKeyRelatedField(read_only=True)

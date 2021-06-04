@@ -15,7 +15,7 @@ class HotelReadOnlySerializer(serializers.Serializer):
     id = serializers.UUIDField(read_only=True)
     staff = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     fid = serializers.CharField(read_only=True)
-    name = serializers.CharField(read_only=True)#, validators=[UniqueValidator(queryset=Hotel.objects.all())])
+    name = serializers.CharField(read_only=True)
     phone = serializers.CharField(read_only=True)
     email = serializers.CharField(read_only=True)
     fax = serializers.CharField(read_only=True)
@@ -30,3 +30,12 @@ class HotelReadOnlySerializer(serializers.Serializer):
     score = serializers.FloatField(read_only=True, min_value=0)
     rooms = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     feedbacks = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    total_room = serializers.IntegerField(read_only=True)
+    turnove = serializers.IntegerField(read_only=True)
+
+
+class StatisticalHotelReadOnlySerializer(serializers.Serializer):
+    id = serializers.UUIDField(read_only=True)
+    total_room = serializers.IntegerField(read_only=True)
+    turnove = serializers.IntegerField(read_only=True)
+    total_rent = serializers.IntegerField(read_only=True)

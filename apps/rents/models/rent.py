@@ -1,8 +1,11 @@
 import uuid
 
 from django.db import models
+from django.db.models import DO_NOTHING
 from safedelete import SOFT_DELETE_CASCADE, HARD_DELETE
 from safedelete.models import SafeDeleteMixin
+
+from apps.hotel.models import Hotel
 from apps.rents.models.feedback import Feedback
 
 
@@ -26,7 +29,13 @@ class Rent(SafeDeleteMixin):
         blank=True,
         null=True,
     )
+    hotel = models.ForeignKey(
+        Hotel,
+        on_delete=DO_NOTHING,
+        related_name='rents',
+    )
     status = models.BooleanField(default=False)
+    done = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

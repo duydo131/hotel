@@ -1,25 +1,29 @@
 from django.db import transaction
+from django.utils.translation import gettext_lazy as _
 from rest_framework import viewsets, status
 from rest_framework.exceptions import APIException
-from django.utils.translation import gettext_lazy as _
+from rest_framework.response import Response
+
 from apps.room.filters import RoomFilterSet
 from apps.room.models import Room
 from apps.room.serializers import RoomSerializer, RoomReadOnlySerializer
+from apps.room.serializers.room import RoomDetailReadOnlySerializer
 from core.mixins import GetSerializerClassMixin
 from core.permissions import IsEmployee
-from rest_framework.response import Response
 
 
 class RoomViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
     permission_classes = [IsEmployee]
 
-    queryset = Room.objects.filter()
-
     serializer_class = RoomSerializer
+    serializer_detail_class = RoomDetailReadOnlySerializer
+
+    queryset = Room.objects.all()
+    queryset_detail = Room.objects.prefetch_related('services')
 
     serializer_action_classes = {
-        "list": RoomReadOnlySerializer,
-        "retrieve": RoomReadOnlySerializer,
+        # "list": RoomReadOnlySerializer,
+        # "retrieve": RoomDetailReadOnlySerializer,
     }
     filterset_class = RoomFilterSet
 
@@ -29,7 +33,9 @@ class RoomViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
                 serializer = self.get_serializer(data=request.data)
                 serializer.is_valid(raise_exception=True)
                 self.perform_create(serializer)
-                room = Room.objects.get(id=dict(serializer.data)['id'])
+                room = (Room.objects
+                        .filter(id=dict(serializer.data)['id'])
+                        .prefetch_related("category__services").first())
                 for service in room.category.services.all():
                     room.services.add(service)
                 room.save()

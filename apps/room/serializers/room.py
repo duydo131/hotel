@@ -1,7 +1,8 @@
 from rest_framework import serializers
+from rest_framework.utils import model_meta
 
-from apps.hotel.models import Hotel
 from apps.room.models import Room
+from apps.room.serializers.service import ServiceReadOnlySerializer
 
 
 class RoomSerializer(serializers.ModelSerializer):
@@ -9,12 +10,14 @@ class RoomSerializer(serializers.ModelSerializer):
         model = Room
         fields = '__all__'
 
+    def validate_name(self, name):
+        if self.instance and Room.objects.filter(hotel_id=self.instance.hotel_id, name=name).exists():
+            raise serializers.ValidationError("Room name in hotel is unique")
+        return name
+
     def validate(self, data):
-        try:
-            hotel = Hotel.objects.get(id=data['hotel'])
-            if data['name'] in [room.name for room in hotel.rooms.all()]:
-                raise Exception("Error")
-        except Exception:
+        hotel = data.get('hotel')
+        if not self.instance and data.get("name", None) and Room.objects.filter(hotel=hotel, name=data["name"]):
             raise serializers.ValidationError("Room name in hotel is unique")
 
         return data
@@ -34,4 +37,7 @@ class RoomReadOnlySerializer(serializers.Serializer):
     adult = serializers.IntegerField(read_only=True, min_value=1)
     children = serializers.IntegerField(read_only=True, min_value=0)
     room_device = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
-    services = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+
+
+class RoomDetailReadOnlySerializer(RoomReadOnlySerializer):
+    services = ServiceReadOnlySerializer(many=True, read_only=True)

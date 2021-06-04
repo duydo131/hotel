@@ -1,1 +1,1 @@
-from .room import RoomSerializer, RoomReadOnlySerializer
+from .room import RoomSerializer, RoomReadOnlySerializer, RoomDetailReadOnlySerializer
