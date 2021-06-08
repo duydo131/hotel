@@ -150,8 +150,7 @@ REST_FRAMEWORK = {
     "errors",
     'DEFAULT_PAGINATION_CLASS':
     'core.pagination.CustomPageNumberPagination',
-    'PAGE_SIZE':
-    os.getenv("DEFAULT_PAGE_SIZE", 20),
+    'PAGE_SIZE': os.getenv("DEFAULT_PAGE_SIZE", 20),
 }
 
 USE_X_FORWARDED_HOST = True

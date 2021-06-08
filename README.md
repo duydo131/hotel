@@ -11,4 +11,4 @@ docker-compose build
 docker-compose up
 ```
 
-Server will run at 0.0.0.0 and listen on port 8000
+Server will run at localhost and listen on port 8000

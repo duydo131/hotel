@@ -59,16 +59,6 @@ class GenCacheKey:
             self.key_prefix = 'User_' + str(payload_data['id']) + "_" + request.path
 
 
-@deconstructible
-class GenCachePrefixKey:
-    def __init__(self, request):
-        payload_data = get_values_token(request)
-        if payload_data is None:
-            self.key_prefix = "Ftech_cache"
-        else:
-            self.key_prefix = 'User_' + str(payload_data['id'])
-
-
 def get_values_token(request):
     auth = get_authorization_header(request).split()
     try:
