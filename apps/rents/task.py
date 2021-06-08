@@ -3,7 +3,6 @@ from apps.notification.serializers import NotificationSerializer
 from config.celery import app
 from core.utils import create_model
 
-
 @app.task
 def notification(rent_id, type, hotel_id):
     notificationData = {'rent': rent_id, 'type': type, 'hotel': hotel_id}

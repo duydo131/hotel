@@ -16,7 +16,7 @@ class Rent(SafeDeleteMixin):
     start_date = models.DateField(blank=True)
     end_date = models.DateField(blank=True)
     discount = models.BigIntegerField(null=True, blank=True)
-    totalAmount = models.BigIntegerField(null=True, blank=True)
+    total_amount = models.BigIntegerField(null=True, blank=True)
     user = models.ForeignKey(
         "users.User",
         on_delete=models.CASCADE,

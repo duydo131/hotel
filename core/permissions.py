@@ -16,6 +16,13 @@ from apps.users.models.role import RolePermissions
 #         if isinstance(request.user, App):
 #             return request.user.active
 #         return False
+class IsManager(BasePermission):
+
+    def has_permission(self, request, view):
+        if isinstance(request.user, AnonymousUser):
+            return False
+        return RolePermissions.EMPLOYEE in [role.name for role in request.user.roles.all()] \
+               and request.user.is_authenticated
 
 
 class IsAdmin(BasePermission):

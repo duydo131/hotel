@@ -12,6 +12,7 @@ from rest_framework.response import Response
 from apps.users.filters import UserFilterSet
 from apps.users.models.user import User
 from apps.users.serializers import UserSerializer, UserReadOnlySerializer, LoginSerializer
+from apps.users.serializers.user import UserDetailReadOnlySerializer, RegisterSerializer
 from core.mixins import GetSerializerClassMixin
 from core.swagger_schemas import ManualParametersAutoSchema
 
@@ -21,10 +22,13 @@ from apps.users.models.role import Role, RolePermissions
 class UserViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
     permission_classes = []
     queryset = User.objects.all()
+    queryset_detail = User.objects.prefetch_related('roles')
     serializer_class = UserSerializer
+    serializer_detail_class = UserDetailReadOnlySerializer
+
     serializer_action_classes = {
         "list": UserReadOnlySerializer,
-        "retrieve": UserReadOnlySerializer,
+        "retrieve": UserDetailReadOnlySerializer,
     }
     filterset_class = UserFilterSet
 
@@ -108,7 +112,7 @@ class UserViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
         pagination_class=None,
     )
     def register(self, request, *args, **kwargs):
-        serializer = LoginSerializer(data=request.data)
+        serializer = RegisterSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         password = serializer.validated_data["password"]
         try:

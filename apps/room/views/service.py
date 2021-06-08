@@ -16,8 +16,10 @@ class ServiceViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
     permission_classes = [IsEmployee]
 
     queryset = Service.objects.filter()
+    queryset_detail = Service.objects.filter()
 
     serializer_class = ServiceSerializer
+    serializer_detail_class = ServiceReadOnlySerializer
 
     serializer_action_classes = {
         "list": ServiceReadOnlySerializer,

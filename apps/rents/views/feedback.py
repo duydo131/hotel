@@ -22,14 +22,12 @@ def updateRating(rating, count, feedback):
     rating.clean = (rating.clean * count + feedback.clean) / (count + 1)
 
 
-class FeedbackViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
+class FeedbackViewSet(viewsets.ModelViewSet):
     permission_classes = [IsCustomer]
 
-    queryset = Feedback.objects.filter()
+    queryset = Feedback.objects.all()
 
     serializer_class = FeedbackSerializer
-
-    action = ""
 
     serializer_action_classes = {
         "list": FeedbackReadOnlySerializer,
@@ -73,8 +71,8 @@ class FeedbackViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
                 rating.save()
                 serializer = FeedbackReadOnlySerializer(feedback)
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
-        except Exception:
+        except Exception as ex:
             raise APIException(
-                _("Error Server"),
+                _("Error Server " + str(ex)),
                 status.HTTP_500_INTERNAL_SERVER_ERROR,
             )

@@ -37,6 +37,7 @@ class RoomReadOnlySerializer(serializers.Serializer):
     adult = serializers.IntegerField(read_only=True, min_value=1)
     children = serializers.IntegerField(read_only=True, min_value=0)
     room_device = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    details = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
 
 
 class RoomDetailReadOnlySerializer(RoomReadOnlySerializer):

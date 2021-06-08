@@ -22,8 +22,8 @@ class RoomViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
     queryset_detail = Room.objects.prefetch_related('services')
 
     serializer_action_classes = {
-        # "list": RoomReadOnlySerializer,
-        # "retrieve": RoomDetailReadOnlySerializer,
+        "list": RoomReadOnlySerializer,
+        "retrieve": RoomDetailReadOnlySerializer,
     }
     filterset_class = RoomFilterSet
 

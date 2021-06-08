@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from apps.room.models import RoomCategory
+from apps.room.serializers.service import ServiceReadOnlySerializer
 
 
 class RoomCategorySerializer(serializers.ModelSerializer):
@@ -16,3 +17,7 @@ class RoomCategoryReadOnlySerializer(serializers.Serializer):
     description = serializers.CharField(read_only=True)
     services = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     rooms = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+
+
+class RoomCategoryDetailReadOnlySerializer(RoomCategoryReadOnlySerializer):
+    services = ServiceReadOnlySerializer(many=True, read_only=True)

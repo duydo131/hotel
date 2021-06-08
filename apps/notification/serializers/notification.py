@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from apps.notification.models import Notification
+from apps.rents.serializers import RentReadOnlySerializer
 
 
 class NotificationSerializer(serializers.ModelSerializer):
@@ -18,3 +19,7 @@ class NotificationReadOnlySerializer(serializers.Serializer):
     status = serializers.BooleanField(read_only=True)
     content = serializers.CharField(read_only=True)
     hotel = serializers.PrimaryKeyRelatedField(read_only=True)
+
+
+class NotificationDetailReadOnlySerializer(NotificationReadOnlySerializer):
+    rent = RentReadOnlySerializer(read_only=True)

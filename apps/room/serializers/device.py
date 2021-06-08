@@ -1,9 +1,14 @@
 from rest_framework import serializers
 
 from apps.room.models import Device
+from core.utils import validate_positive
 
 
 class DeviceSerializer(serializers.ModelSerializer):
+
+    def validated_price(self, value):
+        return validate_positive(value, "price")
+
     class Meta:
         model = Device
         fields = '__all__'

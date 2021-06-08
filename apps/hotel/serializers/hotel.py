@@ -3,6 +3,7 @@ from rest_framework.validators import UniqueValidator
 
 from apps.hotel.models import Hotel
 from apps.hotel.serializers.rating import RatingSerializer
+from apps.room.serializers import RoomReadOnlySerializer
 
 
 class HotelSerializer(serializers.ModelSerializer):
@@ -32,6 +33,10 @@ class HotelReadOnlySerializer(serializers.Serializer):
     feedbacks = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     total_room = serializers.IntegerField(read_only=True)
     turnove = serializers.IntegerField(read_only=True)
+
+
+class HotelDetailReadOnlySerializer(HotelReadOnlySerializer):
+    rooms = RoomReadOnlySerializer(many=True, read_only=True)
 
 
 class StatisticalHotelReadOnlySerializer(serializers.Serializer):

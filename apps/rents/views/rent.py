@@ -1,3 +1,5 @@
+from builtins import Exception
+
 from django.db import transaction
 from rest_framework import viewsets, status
 from django.utils.translation import gettext_lazy as _
@@ -8,10 +10,11 @@ from apps.notification.models import NotificationType
 from apps.rents.filters import RentFilterSet
 from apps.rents.models import Rent
 from apps.rents.serializers import RentDetailSerializer
-from apps.rents.serializers.rent import RentSerializer, RentReadOnlySerializer
+from apps.rents.serializers.rent import RentSerializer, RentReadOnlySerializer, RentGetDetailReadOnlySerializer
 from core.mixins import GetSerializerClassMixin
 from core.permissions import IsCustomer
-from core.utils import create_model
+from core.task import update_cache
+from core.utils import create_model, get_values_token, GenCachePrefixKey
 from apps.rents.task import notification
 
 
@@ -19,13 +22,14 @@ class RentViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
     permission_classes = [IsCustomer]
 
     queryset = Rent.objects.all()
-    queryset_detail = Rent.objects.all()
+    queryset_detail = Rent.objects.prefetch_related('details')
 
     serializer_class = RentSerializer
+    serializer_detail_class = RentGetDetailReadOnlySerializer
 
     serializer_action_classes = {
         "list": RentReadOnlySerializer,
-        "retrieve": RentReadOnlySerializer,
+        "retrieve": RentGetDetailReadOnlySerializer,
     }
     filterset_class = RentFilterSet
 
@@ -40,15 +44,14 @@ class RentViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
                 request.data['hotel'] = hotel.id
                 x = super().create(request, *args, **kwargs)
                 rent_id = x.data['id']
-
                 for detail in details:
                     detail['rent'] = rent_id
                     create_model(detail, RentDetailSerializer)
 
                 notification.apply_async(args=[rent_id, NotificationType.RENT, hotel.id])
                 return x
-        except:
+        except Exception as ex:
             raise APIException(
-                _("Cannot create rent!!"),
-                status.HTTP_404_NOT_FOUND,
+                _("Cannot create rent : " + str(ex)),
+                status.HTTP_400_BAD_REQUEST,
             )

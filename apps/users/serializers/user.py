@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from apps.users.models.user import User
+from apps.users.serializers.role import RoleReadOnlySerializer
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -25,7 +26,17 @@ class UserReadOnlySerializer(serializers.Serializer):
     rents = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
 
 
+class UserDetailReadOnlySerializer(UserReadOnlySerializer):
+    roles = RoleReadOnlySerializer(many=True, read_only=True)
+
+
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField(required=True)
     password = serializers.CharField(required=True)
+
+
+class RegisterSerializer(serializers.Serializer):
+    username = serializers.CharField(required=True)
+    password = serializers.CharField(required=True)
+    email = serializers.CharField(required=True)
 

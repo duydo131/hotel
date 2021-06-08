@@ -12,7 +12,7 @@ class RatingViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
     permission_classes = [IsAdmin]
 
     queryset = Rating.objects.all()
-
+    queryset_detail = Rating.objects.all()
     serializer_class = RatingSerializer
 
     serializer_action_classes = {

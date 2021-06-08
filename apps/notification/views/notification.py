@@ -1,31 +1,24 @@
-from django.db import transaction
 from rest_framework import viewsets
 
-from apps.hotel.models import Hotel
 from apps.notification.filters import NotificationFilterSet
 from apps.notification.models import Notification
 from apps.notification.serializers import NotificationSerializer, NotificationReadOnlySerializer
-from apps.rents.filters import FeedbackFilterSet
-from apps.rents.models import Feedback, Rent
-from apps.rents.serializers import FeedbackSerializer, FeedbackReadOnlySerializer
+from apps.notification.serializers.notification import NotificationDetailReadOnlySerializer
 from core.mixins import GetSerializerClassMixin
-from core.permissions import IsCustomer, IsEmployee
-from django.utils.translation import gettext_lazy as _
-from rest_framework.exceptions import APIException
-from rest_framework import status
-from rest_framework.response import Response
+from core.permissions import IsEmployee
 
 
 class NotificationViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
     permission_classes = [IsEmployee]
 
     queryset = Notification.objects.all()
-
+    queryset_detail = Notification.objects.select_related('rent')
     serializer_class = NotificationSerializer
+    serializer_detail_class = NotificationDetailReadOnlySerializer
 
     serializer_action_classes = {
         "list": NotificationReadOnlySerializer,
-        "retrieve": NotificationReadOnlySerializer,
+        "retrieve": NotificationDetailReadOnlySerializer,
     }
     filterset_class = NotificationFilterSet
 

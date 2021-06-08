@@ -12,8 +12,7 @@ from safedelete.models import SafeDeleteMixin
 
 from apps.hotel.models import Hotel
 from apps.users.models.user_manager import CustomUserManager
-from apps.users.models.role import Role, RolePermissions
-from core.customer_manager import BaseBulkSafeDeleteModel
+from apps.users.models.role import RolePermissions
 
 
 class UserGender(models.TextChoices):

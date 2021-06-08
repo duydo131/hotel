@@ -10,9 +10,11 @@ from core.permissions import IsCustomer
 class RentDetailViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
     permission_classes = [IsCustomer]
 
-    queryset = RentDetail.objects.filter()
+    queryset = RentDetail.objects.all()
+    queryset_detail = RentDetail.objects.all()
 
     serializer_class = RentDetailSerializer
+    serializer_detail_class = RentDetailReadOnlySerializer
 
     serializer_action_classes = {
         "list": RentDetailReadOnlySerializer,
