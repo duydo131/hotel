@@ -1,26 +1,14 @@
 # Django REST API Template
 
 ## How To Run
-### 1. Create environment
+### 1. Build Dọcker
 ```
-python -m venv venv
-source venv/bin/activate
-pip install --upgrade pip
-pip install -r requirements.txt
+docker-compose build
 ```
 
 ### 2. Run DB from docker-compose
 ```
-docker-compose up -d db
+docker-compose up
 ```
 
-### 3. Run migrate for db
-```
-python manage.py migrate
-```
-
-### 4. Run server
-```
-python manage.py runserver
-```
-Server will run at localhost and listen on port 8000
+Server will run at 0.0.0.0 and listen on port 8000

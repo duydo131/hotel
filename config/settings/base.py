@@ -169,14 +169,15 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # AWS_S3_ENDPOINT_URL = os.getenv('AWS_S3_ENDPOINT_URL',
 #                                 'https://minio.dev.ftech.ai')
 
-CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL', 'redis://127.0.0.1:6379')
-CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND',
-                                  'redis://127.0.0.1:6379')
+REDIS_ADDRESS = 'redis'
+
+CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL', f'redis://{REDIS_ADDRESS}:6379')
+CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND', f'redis://{REDIS_ADDRESS}:6379')
 
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': 'redis://127.0.0.1:6379',
+        'LOCATION': f'redis://{REDIS_ADDRESS}:6379',
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
         },
