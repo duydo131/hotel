@@ -1,4 +1,4 @@
-# Django REST API Template
+# Django REST API Hotel
 
 ## How To Run
 ### 1. Build Dọcker
@@ -6,7 +6,7 @@
 docker-compose build
 ```
 
-### 2. Run DB from docker-compose
+### 2. Run db, redis, api from docker-compose
 ```
 docker-compose up
 ```
