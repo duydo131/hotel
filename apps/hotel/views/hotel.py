@@ -54,9 +54,9 @@ class HotelViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
                 rating.save()
                 serializer = HotelReadOnlySerializer(hotel)
                 return Response(data=serializer.data, status=status.HTTP_201_CREATED)
-        except Exception:
+        except Exception as ex:
             raise APIException(
-                _("Error Server"),
+                _("Error Server : " + str(ex)),
                 status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
@@ -74,7 +74,7 @@ class HotelViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
     # @cache_page(200)
     def statistic(self, request, *args, **kwargs):
         print("cache now")
-        month = datetime.now().month - 1
+        month = datetime.now().month
         queryset = Hotel.objects.filter(pk=request.user.hotel_id).filter(
             Q(rents__start_date__month=month)
             & Q(rents__status=True)
@@ -82,7 +82,7 @@ class HotelViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
         ).distinct()
 
         statistics = queryset.annotate(
-            turnove=Sum('rents__totalAmount'),
+            turnove=Sum('rents__total_amount'),
             total_rent=Count('rents', distinct=True),
         ).first()
 

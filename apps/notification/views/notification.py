@@ -27,7 +27,8 @@ class NotificationViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
         return queryset
 
     def update(self, request, *args, **kwargs):
-        request.data['staff'] = request.user.id
+        if request.data['status']:
+            request.data['staff'] = request.user.id
         response = super().update(request, *args, **kwargs)
         print("Xác nhận đặt phòng")
         return response

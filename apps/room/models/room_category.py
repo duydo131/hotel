@@ -9,7 +9,7 @@ from apps.room.models.service import Service
 class RoomCategory(SafeDeleteMixin):
     _safedelete_policy = HARD_DELETE
 
-    name = models.CharField(max_length=100, null=True, blank=True, unique=True)
+    name = models.CharField(max_length=100, unique=True)
     description = models.TextField(null=True, blank=True)
     services = models.ManyToManyField(
         Service,
@@ -23,4 +23,4 @@ class RoomCategory(SafeDeleteMixin):
         ordering = ["name"]
 
     def __str__(self):
-        return self.name
+        return str(self.name)

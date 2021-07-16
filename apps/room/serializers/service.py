@@ -10,7 +10,9 @@ class ServiceSerializer(serializers.ModelSerializer):
         return validate_positive(value, "price")
 
     def validate_voucher(self, value):
-        return validate_positive(value, "voucher")
+        if (value < 0) or (value > 1):
+            raise serializers.ValidationError("Voucher must be greater than 0 and less than 1")
+        return value
 
     class Meta:
         model = Service

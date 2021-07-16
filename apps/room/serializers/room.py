@@ -3,12 +3,25 @@ from rest_framework.utils import model_meta
 
 from apps.room.models import Room
 from apps.room.serializers.service import ServiceReadOnlySerializer
+from core.utils import validate_positive
 
 
 class RoomSerializer(serializers.ModelSerializer):
     class Meta:
         model = Room
         fields = '__all__'
+
+    def validate_price(self, value):
+        return validate_positive(value, "price")
+
+    def validate_price_now(self, value):
+        return validate_positive(value, "price_now")
+
+    def validate_adult(self, value):
+        return validate_positive(value, "adult")
+
+    def validate_children(self, value):
+        return validate_positive(value, "children")
 
     def validate_name(self, name):
         if self.instance and Room.objects.filter(hotel_id=self.instance.hotel_id, name=name).exists():

@@ -9,7 +9,7 @@ class Service(SafeDeleteMixin):
     _safedelete_policy = HARD_DELETE
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.CharField(max_length=50, null=True, blank=True, unique=True)
+    name = models.CharField(max_length=50, unique=True)
     price = models.BigIntegerField(blank=True)
     voucher = models.FloatField(null=True, blank=True)
     description = models.TextField(null=True, blank=True)

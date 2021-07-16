@@ -6,7 +6,7 @@ from core.utils import validate_positive
 
 class DeviceSerializer(serializers.ModelSerializer):
 
-    def validated_price(self, value):
+    def validate_price(self, value):
         return validate_positive(value, "price")
 
     class Meta:

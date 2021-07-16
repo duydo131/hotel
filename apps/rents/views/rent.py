@@ -13,8 +13,7 @@ from apps.rents.serializers import RentDetailSerializer
 from apps.rents.serializers.rent import RentSerializer, RentReadOnlySerializer, RentGetDetailReadOnlySerializer
 from core.mixins import GetSerializerClassMixin
 from core.permissions import IsCustomer
-from core.task import update_cache
-from core.utils import create_model, get_values_token, GenCachePrefixKey
+from core.utils import create_model
 from apps.rents.task import notification
 
 
@@ -44,7 +43,13 @@ class RentViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
                 request.data['hotel'] = hotel.id
                 x = super().create(request, *args, **kwargs)
                 rent_id = x.data['id']
+                room_detail = []
+                print("rent_id", rent_id)
+                # raise Exception("error")
                 for detail in details:
+                    if detail['room'] in room_detail:
+                        continue
+                    room_detail.append(detail['room'])
                     detail['rent'] = rent_id
                     create_model(detail, RentDetailSerializer)
 

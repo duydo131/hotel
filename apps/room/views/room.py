@@ -42,8 +42,8 @@ class RoomViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
                 data = RoomSerializer(room)
                 headers = self.get_success_headers(data)
                 return Response(data.data, status=status.HTTP_201_CREATED, headers=headers)
-        except:
+        except Exception as ex:
             raise APIException(
-                _("Don't create room!"),
+                _("Don't create room : " + str(ex)),
                 status.HTTP_404_NOT_FOUND,
             )

@@ -1,3 +1,4 @@
+from django.db import transaction
 from rest_framework import viewsets
 
 from rest_framework import status
@@ -28,31 +29,32 @@ class ServiceViewSet(GetSerializerClassMixin, viewsets.ModelViewSet):
     filterset_class = ServiceFilterSet
 
     def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        id_service = dict(serializer.data)['id']
-        service = Service.objects.get(id=id_service)
-        if not service:
+        try:
+            with transaction.atomic():
+                serializer = self.get_serializer(data=request.data)
+                serializer.is_valid(raise_exception=True)
+                self.perform_create(serializer)
+                id_service = dict(serializer.data)['id']
+                service = Service.objects.get(id=id_service)
+                if not service:
+                    raise APIException(
+                        _("Cannot create service"),
+                        status.HTTP_500_INTERNAL_SERVER_ERROR,
+                    )
+                category = request.data['category']
+                if category:
+                    category_model = [RoomCategory.objects.get(id=id_cat) for id_cat in category]
+                    for cat in category_model:
+                        cat.services.add(service)
+                        cat.save()
+
+                serializer = ServiceReadOnlySerializer(service)
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+        except Exception as ex:
             raise APIException(
-                _("Cannot create service"),
+                _("Error Server: " + str(ex)),
                 status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
-        category = request.data['category']
-        if category:
-            try:
-                category_model = [RoomCategory.objects.get(id=id_cat) for id_cat in category]
-                for cat in category_model:
-                    cat.services.add(service)
-                    cat.save()
-            except Exception:
-                raise APIException(
-                    _("Error Server"),
-                    status.HTTP_500_INTERNAL_SERVER_ERROR,
-                )
-        serializer = ServiceReadOnlySerializer(service)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-
 
 
 

@@ -168,7 +168,7 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # AWS_S3_ENDPOINT_URL = os.getenv('AWS_S3_ENDPOINT_URL',
 #                                 'https://minio.dev.ftech.ai')
 
-REDIS_ADDRESS = 'redis'
+REDIS_ADDRESS = '127.0.0.1'
 
 CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL', f'redis://{REDIS_ADDRESS}:6379')
 CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND', f'redis://{REDIS_ADDRESS}:6379')

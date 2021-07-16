@@ -44,9 +44,10 @@ def create_model(data, serializer_model):
         serializer = serializer_model(data=data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
+        raise Exception("error")
         return serializer
     except Exception as e:
-        raise e
+        pass
 
 
 @deconstructible
