@@ -1,4 +1,4 @@
-fake_kafka_data.py
+abc.txt
 service_account.json
 voip_spago.pem
 # Byte-compiled / optimized / DLL files
@@ -130,4 +130,3 @@ migrations/*
 #file temporary
 /txt
 
-duy.txt
